@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><%=shopData.shopName%></title>
+    <meta charset="utf-8">
+    <title><%=shopData.shopName%> Book Bargain</title>
     <link rel="stylesheet"  type="text/css" href="/main.css" />
 </head>
 <body>
-    <h1><%=shopData.shopName%></h1>
+    <h1><%=shopData.shopName%> Book Bargain(under £20)</h1>
 
-    <% if (availableBooks && availableBooks.length > 0) { %>
+    <% if (bargainBooks && bargainBooks.length > 0) { %>
         <table>
             <thead>
                 <tr>
@@ -16,7 +17,7 @@
                 </tr>
             </thead>
             <tbody>
-                <% availableBooks.forEach(book => { %>
+                <% bargainBooks.forEach(function(book) { %>
                     <tr>
                         <td><%= book.name %></td>
                         <td class="price"><%= book.price %></td>
@@ -25,7 +26,7 @@
             </tbody>
         </table>
     <% } else { %>
-        <p class="no-results">No books available at the moment.</p>
+        <p class="no-results">No bargain books at the moment.</p>
     <% } %>
 
     <p><a href="/">Back to home</a></p>

@@ -6,9 +6,23 @@ router.get('/search',function(req, res, next){
     res.render("search.ejs")
 });
 
-router.get('/search-result', function (req, res, next) {
-    //searching in the database
-    res.send("You searched for: " + req.query.keyword)
+router.get('/search_result', function (req, res, next) {
+
+    let keyword = req.query.search_text;
+
+    // advanced search. partial match on title
+    let sqlquery = "SELECT * FROM books WHERE name LIKE ?";
+    let searchValue = ['%' + keyword + '%'];
+
+    db.query(sqlquery, searchValue, (err, result) => {
+        if (err) {
+            return next(err);
+        }
+        res.render('searchresults.ejs', {
+            books: result,
+            keyword: keyword
+        });
+    });
 });
 
 router.get('/list', function(req, res, next) {
@@ -47,6 +61,19 @@ router.post('/bookadded', function (req, res, next) {
                 ' price ' +
                 req.body.price
             );
+        }
+    });
+});
+
+// bargain books. price < £20
+router.get('/bargainbooks', function (req, res, next) {
+    let sqlquery = "SELECT * FROM books WHERE price < 20";
+
+    db.query(sqlquery, (err, result) => {
+        if (err) {
+            next(err);
+        } else {
+            res.render('bargainbooks.ejs', { bargainBooks: result });
         }
     });
 });
