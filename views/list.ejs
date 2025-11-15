@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Berties Book Shop</title>
+</head>
+<body>
+    <h1>Berties Book Shop</h1>
+    <ul>
+        <% availableBooks.forEach(book => { %>
+            <li>
+                <strong><%= book.name %></strong>
+                (£<%= book.price %>)
+            </li>
+        <% }) %>
+    </ul>
+</body>
+</html>
