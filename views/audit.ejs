@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Audit Log</title>
+  </head>
+  <body>
+    <h1>Login Audit Log</h1>
+
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Action</th>
+        <th>Time</th>
+      </tr>
+
+      <% entries.forEach(function(row) { %>
+        <tr>
+          <td><%= row.id %></td>
+          <td><%= row.username %></td>
+          <td><%= row.action %></td>
+          <td><%= row.time %></td>
+        </tr>
+      <% }) %>
+    </table>
+  </body>
+</html>
