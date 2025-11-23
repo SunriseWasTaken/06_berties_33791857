@@ -12,7 +12,6 @@ router.get('/register', function (req, res, next) {
 router.post('/registered', function (req, res, next) {
     const plainPassword = req.body.password
     bcrypt.hash(plainPassword, saltRounds, function (err, hashedPassword) {
-
         if (err) { return next(err) }
 
         let sqlquery = "INSERT INTO users (username, first, last, email, hashedPassword) VALUES (?,?,?,?,?)"
@@ -26,13 +25,21 @@ router.post('/registered', function (req, res, next) {
                 result += 'Your password is: ' + req.body.password + ' and your hashed password is: ' + hashedPassword
                 res.send(result)
             }
-
         })
-
     })
 });
 
+router.get('/list', function(req, res, next) {
+    let sqlquery = "SELECT username, first, last, email FROM users"
+    db.query(sqlquery, (err, result) => {
+        if (err) { next(err) }
+        res.render("listusers.ejs", {users: result})
+    })
+})
 
+router.get('/login', function(req, res) {
+    res.render("login.ejs")
+})
 
 // Export the router object so index.js can access it
 module.exports = router
