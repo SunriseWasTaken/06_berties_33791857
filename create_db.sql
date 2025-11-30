@@ -10,8 +10,3 @@ CREATE TABLE IF NOT EXISTS books (
     name   VARCHAR(50),
     price  DECIMAL(5, 2),
     PRIMARY KEY(id));
-
-# Create the application user
-CREATE USER IF NOT EXISTS 'berties_books_app'@'localhost' IDENTIFIED BY 'qwertyuiop'; 
-GRANT ALL PRIVILEGES ON berties_books.* TO ' berties_books_app'@'localhost';
-

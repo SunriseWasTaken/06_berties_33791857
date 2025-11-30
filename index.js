@@ -1,11 +1,11 @@
-require('dotenv').config()
+require('dotenv').config();
 
 // Import express and ejs
-var express = require ('express')
-var ejs = require('ejs')
-const path = require('path')
+var express = require ('express');
+var ejs = require('ejs');
+const path = require('path');
 var mysql = require('mysql2');
-var session = require('express-session')
+var session = require('express-session');
 
 // Create the express application object
 const app = express()
