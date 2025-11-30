@@ -38,12 +38,12 @@ router.get('/list', function(req, res, next) {
 });
 
 // show the add book form
-router.get('/addbook', function(req, res, next) {
+router.get('/addbook', redirectLogin, redirectLogin, function(req, res, next) {
     res.render('addbook.ejs');
 });
 
 // handle form submission and insert into database
-router.post('/bookadded', function (req, res, next) {
+router.post('/bookadded', redirectLogin, function (req, res, next) {
 
     // saving data in database
     let sqlquery = "INSERT INTO books (name, price) VALUES (?, ?)";

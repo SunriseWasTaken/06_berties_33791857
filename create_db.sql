@@ -9,4 +9,4 @@ CREATE TABLE IF NOT EXISTS books (
     id     INT AUTO_INCREMENT,
     name   VARCHAR(50),
     price  DECIMAL(5, 2),
-    PRIMARY KEY(id));
+    PRIMARY KEY(id));f
