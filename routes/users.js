@@ -19,54 +19,54 @@ router.get("/register", function (req, res, next) {
   res.render("register.ejs");
 });
 
-router.post("/registered"
-  [check('email').isEmail(),
-  check('username').isLength({ min: 5, max: 20})],
+router.post("/registered",
+  [check("email").isEmail(), 
+  check("username").isLength({ min: 5, max: 20 })],
   function (req, res, next) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    res.render('./register')
-  }
-  else{
-    const plainPassword = req.body.password;
-    bcrypt.hash(plainPassword, saltRounds, function (err, hashedPassword) {
-      if (err) {
-        return next(err);
-      }
-      
-      let sqlquery =
-      "INSERT INTO users (username, first, last, email, hashedPassword) VALUES (?,?,?,?,?)";
-      
-      let newrecord = [
-        req.body.username,
-        req.body.first,
-        req.body.last,
-        req.body.email,
-        hashedPassword,
-      ];
-      
-      db.query(sqlquery, newrecord, (err, result) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.render("./register");
+    } else {
+      const plainPassword = req.body.password;
+      bcrypt.hash(plainPassword, saltRounds, function (err, hashedPassword) {
         if (err) {
           return next(err);
-        } else {
-          result =
-          "Hello " +
-          req.body.first +
-          " " +
-          req.body.last +
-          " you are now registered!  We will send an email to you at " +
-          req.body.email;
-          result +=
-          "Your password is: " +
-          req.body.password +
-          " and your hashed password is: " +
-          hashedPassword;
-          res.send(result);
         }
+
+        let sqlquery =
+          "INSERT INTO users (username, first, last, email, hashedPassword) VALUES (?,?,?,?,?)";
+
+        let newrecord = [
+          req.body.username,
+          req.body.first,
+          req.body.last,
+          req.body.email,
+          hashedPassword,
+        ];
+
+        db.query(sqlquery, newrecord, (err, result) => {
+          if (err) {
+            return next(err);
+          } else {
+            result =
+              "Hello " +
+              req.body.first +
+              " " +
+              req.body.last +
+              " you are now registered!  We will send an email to you at " +
+              req.body.email;
+            result +=
+              "Your password is: " +
+              req.body.password +
+              " and your hashed password is: " +
+              hashedPassword;
+            res.send(result);
+          }
+        });
       });
-    });
+    }
   }
-});
+);
 
 router.get("/list", redirectLogin, function (req, res, next) {
   let sqlquery = "SELECT username, first, last, email FROM users";
