@@ -25,7 +25,7 @@ router.get('/search_result', function (req, res, next) {
     });
 });
 
-router.get('/list', redirectLogin, function(req, res, next) {
+router.get('/list', function(req, res, next) {
     let sqlquery = "SELECT * FROM books";
     // query database to get all the books
     // execute sql query
@@ -38,7 +38,7 @@ router.get('/list', redirectLogin, function(req, res, next) {
 });
 
 // show the add book form
-router.get('/addbook', redirectLogin, function(req, res, next) {
+router.get('/addbook', function(req, res, next) {
     res.render('addbook.ejs');
 });
 
@@ -66,7 +66,7 @@ router.post('/bookadded', function (req, res, next) {
 });
 
 // bargain books. price < £20
-router.get('/bargainbooks', redirectLogin, function (req, res, next) {
+router.get('/bargainbooks', function (req, res, next) {
     let sqlquery = "SELECT * FROM books WHERE price < 20";
 
     db.query(sqlquery, (err, result) => {
