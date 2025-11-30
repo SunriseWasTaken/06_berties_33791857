@@ -25,7 +25,7 @@ router.get('/search_result', function (req, res, next) {
     });
 });
 
-router.get('/list', function(req, res, next) {
+router.get('/list', redirectLogin, function(req, res, next) {
     let sqlquery = "SELECT * FROM books";
     // query database to get all the books
     // execute sql query
@@ -38,12 +38,12 @@ router.get('/list', function(req, res, next) {
 });
 
 // show the add book form
-router.get('/addbook', redirectLogin, redirectLogin, function(req, res, next) {
+router.get('/addbook', redirectLogin, function(req, res, next) {
     res.render('addbook.ejs');
 });
 
 // handle form submission and insert into database
-router.post('/bookadded', redirectLogin, function (req, res, next) {
+router.post('/bookadded', function (req, res, next) {
 
     // saving data in database
     let sqlquery = "INSERT INTO books (name, price) VALUES (?, ?)";
@@ -66,7 +66,7 @@ router.post('/bookadded', redirectLogin, function (req, res, next) {
 });
 
 // bargain books. price < £20
-router.get('/bargainbooks', function (req, res, next) {
+router.get('/bargainbooks', redirectLogin, function (req, res, next) {
     let sqlquery = "SELECT * FROM books WHERE price < 20";
 
     db.query(sqlquery, (err, result) => {
