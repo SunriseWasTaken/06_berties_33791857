@@ -5,38 +5,39 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
-const { check, validationResult } = require('express-validator');
+const { check, validationResult } = require("express-validator");
 
 const redirectLogin = (req, res, next) => {
-  if (!req.session.userId ) {
-    res.redirect('./login') // redirect to the login page
-  } else { 
-      next (); // move to the next middleware function
-  } 
-}
+  if (!req.session.userId) {
+    res.redirect("./login"); // redirect to the login page
+  } else {
+    next(); // move to the next middleware function
+  }
+};
 
 router.get("/register", function (req, res, next) {
   res.render("register.ejs");
 });
 
-router.post("/registered"
-  [check('email').isEmail(),
-  check('username').isLength({ min: 5, max: 20})],
+router.post(
+  "/registered"[
+    (check("email").isEmail(), 
+    check("username").isLength({ min: 5, max: 20 }))
+  ],
   function (req, res, next) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    res.render('./register')
-  }
-  else{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.render("./register");
+    }
     const plainPassword = req.body.password;
     bcrypt.hash(plainPassword, saltRounds, function (err, hashedPassword) {
       if (err) {
         return next(err);
       }
-      
+
       let sqlquery =
-      "INSERT INTO users (username, first, last, email, hashedPassword) VALUES (?,?,?,?,?)";
-      
+        "INSERT INTO users (username, first, last, email, hashedPassword) VALUES (?,?,?,?,?)";
+
       let newrecord = [
         req.body.username,
         req.body.first,
@@ -44,29 +45,29 @@ router.post("/registered"
         req.body.email,
         hashedPassword,
       ];
-      
+
       db.query(sqlquery, newrecord, (err, result) => {
         if (err) {
           return next(err);
         } else {
           result =
-          "Hello " +
-          req.body.first +
-          " " +
-          req.body.last +
-          " you are now registered!  We will send an email to you at " +
-          req.body.email;
+            "Hello " +
+            req.body.first +
+            " " +
+            req.body.last +
+            " you are now registered!  We will send an email to you at " +
+            req.body.email;
           result +=
-          "Your password is: " +
-          req.body.password +
-          " and your hashed password is: " +
-          hashedPassword;
+            "Your password is: " +
+            req.body.password +
+            " and your hashed password is: " +
+            hashedPassword;
           res.send(result);
         }
       });
     });
   }
-});
+);
 
 router.get("/list", redirectLogin, function (req, res, next) {
   let sqlquery = "SELECT username, first, last, email FROM users";
@@ -142,14 +143,14 @@ router.get("/audit", redirectLogin, function (req, res, next) {
   });
 });
 
-router.get('/logout', redirectLogin, (req,res) => {
-  req.session.destroy(err => {
-  if (err) {
-    return res.redirect('./')
-  }
-  res.send('you are now logged out. <a href='+'./'+'>Home</a>');
-  })
-})
+router.get("/logout", redirectLogin, (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.redirect("./");
+    }
+    res.send("you are now logged out. <a href=" + "./" + ">Home</a>");
+  });
+});
 
 // Export the router object so index.js can access it
 module.exports = router;
