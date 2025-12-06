@@ -1,11 +1,11 @@
 // Create a new router
 const express = require("express");
 const router = express.Router();
+const { check, validationResult } = require("express-validator");
 
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
-const { check, validationResult } = require("express-validator");
 
 const redirectLogin = (req, res, next) => {
   if (!req.session.userId) {
