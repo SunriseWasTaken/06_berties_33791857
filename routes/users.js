@@ -20,9 +20,10 @@ router.get("/register", function (req, res, next) {
 });
 
 router.post(
-  "/registered"[
-    (check("email").isEmail(), 
-    check("username").isLength({ min: 5, max: 20 }))
+  "/registered",
+  [
+    check("email").isEmail(), 
+    check("username").isLength({ min: 5, max: 20 })
   ],
   function (req, res, next) {
     const errors = validationResult(req);
