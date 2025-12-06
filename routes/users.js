@@ -22,23 +22,24 @@ router.get("/register", function (req, res, next) {
 router.post(
   "/registered",
   [
-    check("email").isEmail(), 
-    check("username").isLength({ min: 5, max: 20 })
+    check("email").isEmail().withMessage("Invalid email address"), 
+    check("username").isLength({ min: 5, max: 20 }).withMessage("Username must be between 5 and 20 characters")
   ],
   function (req, res, next) {
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
-      res.render("./register");
+      return res.render("./register", {
+        old: req.body
+      });
     }
+    
     const plainPassword = req.body.password;
+    
     bcrypt.hash(plainPassword, saltRounds, function (err, hashedPassword) {
-      if (err) {
-        return next(err);
-      }
+      if (err) return next(err);
 
-      let sqlquery =
-        "INSERT INTO users (username, first, last, email, hashedPassword) VALUES (?,?,?,?,?)";
-
+      let sqlquery = "INSERT INTO users (username, first, last, email, hashedPassword) VALUES (?,?,?,?,?)";
       let newrecord = [
         req.body.username,
         req.body.first,
@@ -51,18 +52,8 @@ router.post(
         if (err) {
           return next(err);
         } else {
-          result =
-            "Hello " +
-            req.body.first +
-            " " +
-            req.body.last +
-            " you are now registered!  We will send an email to you at " +
-            req.body.email;
-          result +=
-            "Your password is: " +
-            req.body.password +
-            " and your hashed password is: " +
-            hashedPassword;
+          result = "Hello " + req.body.first + " " + req.body.last + " you are now registered!  We will send an email to you at " + req.body.email;
+          result += " Your password is: " + req.body.password + " and your hashed password is: " + hashedPassword;
           res.send(result);
         }
       });
